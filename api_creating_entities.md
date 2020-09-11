@@ -19,7 +19,7 @@ The `EntityManager` property of a `World` returns its `EntityManager`.
 
 In a system, we should get an `EntityManager` *via* the system itself to ensure we get the `EntityManager` of the `World` to which the system belongs:
 
-```
+```csharp
 // (in a system)
 EntityManager manager = this.EntityManager;
 ```
@@ -28,7 +28,7 @@ EntityManager manager = this.EntityManager;
 
 To create an `EntityArchetype`, which represents a set of component types:
 
-```
+```csharp
 // Creates an EntityArchetype consisting of components Foo and Bar
 EntityArchetype archetype = manager.CreateArchetype(typeof(Foo), typeof(Bar));
 ```
@@ -37,7 +37,7 @@ EntityArchetype archetype = manager.CreateArchetype(typeof(Foo), typeof(Bar));
 
 To create an `EntityQuery`:
 
-```
+```csharp
 // Creates a query matching all chunks with components Foo and Bar.
 EntityQuery query = manager.CreateEntityQuery(typeof(Foo), typeof(Bar));
 ```
@@ -54,14 +54,14 @@ We generally, though, want the queries used in a system to be registered with th
 
 To create a new entity with no components:
 
-```
+```csharp
 // Create a new entity with no components.
 Entity e = manager.CreateEntity();
 ```
 
 To create a new entity with a set of components, pass any numuber of `ComponentType` arguments:
 
-```
+```csharp
 // Create a new entity with components Foo and Bar.
 // (The Type arguments get coerced into ComponentType values.)
 Entity e = manager.CreateEntity(typeof(Foo), typeof(Bar));
@@ -69,7 +69,7 @@ Entity e = manager.CreateEntity(typeof(Foo), typeof(Bar));
 
 We can also pass an `EntityArchetype`, which is convenient if we already have one handy:
 
-```
+```csharp
 EntityArchetype archetype = manager.CreateArchetype(typeof(Foo), typeof(Bar));
 
 // Create a new entity with components Foo and Bar.
@@ -78,7 +78,7 @@ Entity e = manager.CreateEntity(types);
 
 To create multiple entities with a set of components:
 
-```
+```csharp
 EntityArchetype archetype = manager.CreateArchetype(typeof(Foo), typeof(Bar));
 
 // Create 5 new entities.
@@ -88,7 +88,7 @@ NativeArray<Entity> ents = manager.CreateEntity(archetype, 5, Allocator.Temp);
 
 Alternatively, if we already have a `NativeArray<Entity>`, we can pass it to be filled:
 
-```
+```csharp
 EntityArchetype archetype = manager.CreateArchetype(typeof(Foo), typeof(Bar));
 
 // We are responsible for disposing of the array when we're done with it.
@@ -108,7 +108,7 @@ manager.CreateEntity(archetype, ents);
 
 To get the value of an entity's component:
 
-```
+```csharp
 Entity e = manager.CreateEntity(typeof(Foo));
 
 // Get the Foo component value of the entity.
@@ -117,7 +117,7 @@ Foo foo = manager.GetComponentData<Foo>(e);
 
 To set the value of an entity's component:
 
-```
+```csharp
 Entity e = manager.CreateEntity(typeof(Foo));
 Foo foo;
 // ...(not shown) init the value of foo
@@ -130,7 +130,7 @@ manager.SetComponentData<Foo>(e, foo);
 
 - `HasComponent<T>()` returns `bool`
 
-```
+```csharp
 Entity e = manager.CreateEntity(typeof(Foo));
 
 // Will return true.
@@ -142,7 +142,7 @@ bool hasBar = manager.HasComponent<Bar>(e);
 
 If the component type that we want to check for is only known at runtime, we can use `ComponentType`:
 
-```
+```csharp
 Entity e = manager.CreateEntity(typeof(Foo));
 
 // Will return true.
@@ -166,7 +166,7 @@ bool hasBar = manager.HasComponent(e, typeof(Bar));
 
 To make a copy of an entity:
 
-```
+```csharp
 Entity e = manager.CreateEntity(typeof(Foo));
 
 // Creates a new entity with all the same components and values as the original.
@@ -178,7 +178,7 @@ Entity copy = manager.Instantiate(e);
 
 To make multiple copies of an entity:
 
-```
+```csharp
 Entity e = manager.CreateEntity(typeof(Foo));
 
 // Create 5 new entities that are all copies of e.
@@ -188,7 +188,7 @@ NativeArray<Entity> ents = manager.Instantiate(e, 5, Allocator.Temp);
 
 Alternatively, if we already have a `NativeArray<Entity>`, we can pass it to be filled:
 
-```
+```csharp
 Entity e = manager.CreateEntity(typeof(Foo));
 
 // We are responsible for disposing of the array when we're done with it.
@@ -201,7 +201,7 @@ manager.Instantiate(e, ents);
 
 To make a single copy of multiple entities:
 
-```
+```csharp
 NativeArray<Entity> originals = new NativeArray<Entity>(5, Allocator.Temp);
 // ...(not shown) init originals
 
@@ -227,7 +227,7 @@ The `CopyEntities(NativeArray<Entity>, NativeArray<Entity>)` method works like `
 
 To destroy a single entity:
 
-```
+```csharp
 Entity e = manager.CreateEntity();
 
 // Destroy the entity.
@@ -236,7 +236,7 @@ manager.DestroyEntity(e);
 
 To destroy multiple entities, specified by id's in an array:
 
-```
+```csharp
 EntityArchetype archetype = manager.CreateArchetype(typeof(Foo), typeof(Bar));
 NativeArray<Entity> ents = manager.CreateEntity(archetype, 5, Allocator.Temp);
 
@@ -246,7 +246,7 @@ manager.DestroyEntity(ents);
 
 We can also use a `NativeSlice<Entity>`. (A slice represents a range of indexes within an array. Be careful not to use a slice once its underlying array has been disposed.):
 
-```
+```csharp
 EntityArchetype archetype = manager.CreateArchetype(typeof(Foo), typeof(Bar));
 NativeArray<Entity> ents = manager.CreateEntity(archetype, 100, Allocator.Temp);
 
@@ -259,7 +259,7 @@ manager.DestroyEntity(slice);
 
 Lastly, we can destroy all entities matching a query:
 
-```
+```csharp
 EntityQuery query = manager.CreateEntityQuery(typeof(Foo), typeof(Bar));
 
 // Destroy all entities having both Foo and Bar components.
@@ -299,7 +299,7 @@ For adding and removing multiple components:
 
 In the simplest case, we wish to add or remove a single component from a single entity, and the type is known at compile time:
 
-```
+```csharp
 Entity e = manager.CreateEntity();
 
 // Adds a Foo component to the entity.
@@ -313,7 +313,7 @@ bool removed = manager.RemoveComponent<Foo>(e);
 
 We can specify an initial value for a component when adding it to an entity:
 
-```
+```csharp
 Entity e = manager.CreateEntity();
 Foo foo;
 // ...(not shown) init value of foo
@@ -326,7 +326,7 @@ bool added = manager.AddComponentData<Foo>(e, foo);
 
 We can add or remove a single component from multiple entities using a `NativeArray<Entity>`:
 
-```
+```csharp
 EntityArchetype archetype = manager.CreateArchetype(typeof(Foo));
 NativeArray<Entity> ents = manager.CreateEntity(archetype, 100, Allocator.Temp);
 
@@ -341,7 +341,7 @@ manager.RemoveComponent<Bar>(ents);
 
 We can also add or remove a component from all entities matching an `EntityQuery`:
 
-```
+```csharp
 EntityQuery query = manager.CreateEntityQuery(typeof(Foo));
 
 // Add the Bar component to all entities matching the query.
@@ -355,7 +355,7 @@ manager.RemoveComponent<Bar>(query);
 
 When adding a component to the entities matching a query, we can specify their intial values with an array:
 
-```
+```csharp
 EntityQuery query = manager.CreateEntityQuery(typeof(Foo));
 
 // We are responsible for disposing of the array when we're done with it.
@@ -370,7 +370,7 @@ manager.AddComponentData<Bar>(query, bars);
 
 To add multiple components to a single entity:
 
-```
+```csharp
 Entity e = manager.CreateEntity();
 ComponentTypes types = new ComponentTypes(typeof(Foo), typeof(Bar));
 
@@ -380,7 +380,7 @@ manager.AddComponent(e, types);
 
 To remove multiple components from all entities matching a query:
 
-```
+```csharp
 EntityQuery query = manager.CreateEntityQuery(typeof(Foo), typeof(Bar));
 ComponentTypes types = new ComponentTypes(typeof(Foo), typeof(Bar));
 
@@ -390,7 +390,7 @@ manager.RemoveComponents(query, types);
 
 Lastly, we can directly set the archetype of an entity:
 
-```
+```csharp
 Entity e = manager.CreateEntity(typeof(A), typeof(B));
 EntityArchetype archetype = manager.CreateArchetype(typeof(A), typeof(C));
 
@@ -398,8 +398,6 @@ EntityArchetype archetype = manager.CreateArchetype(typeof(A), typeof(C));
 // The data of component A is unchanged.
 manager.SetArchetype(e, archetype);
 ```
-
-
 
 
 ## **accessing 'singleton' entities**

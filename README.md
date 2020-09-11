@@ -1,7 +1,4 @@
----
-uid: ecs-api-guide
----
-# guide to the `Unity.Entities` API
+# guide to the `Unity.Entities` API.
 <!-- 
 > Topics to add
 > * 
