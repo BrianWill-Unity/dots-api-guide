@@ -1,7 +1,4 @@
----
-uid: ecs-api-systems
----
-# using `SystemBase`
+# `SystemBase`
 <!-- 
 > Topics to add
 > * 

@@ -1,7 +1,5 @@
----
-uid: ecs-api-entity-manager
----
-# using `EntityManager`
+
+# `EntityManager`
 <!-- 
 > Topics to add
 > * 
@@ -17,10 +15,13 @@ Also be aware that adding or removing components of an existing entity changes i
 
 The `EntityManager` property of a `World` returns its `EntityManager`.
 
-In a system, we should get an `EntityManager` *via* the system itself to ensure we get the `EntityManager` of the `World` to which the system belongs:
+Systems also have an `EntityManager`, which returns the `EntityManager` of the system's `World`.
 
 ```csharp
 // (in a system)
+EntityManager manager = this.World.EntityManager;
+
+// (or more directly)
 EntityManager manager = this.EntityManager;
 ```
 
@@ -32,17 +33,6 @@ To create an `EntityArchetype`, which represents a set of component types:
 // Creates an EntityArchetype consisting of components Foo and Bar
 EntityArchetype archetype = manager.CreateArchetype(typeof(Foo), typeof(Bar));
 ```
-
-## **creating queries**
-
-To create an `EntityQuery`:
-
-```csharp
-// Creates a query matching all chunks with components Foo and Bar.
-EntityQuery query = manager.CreateEntityQuery(typeof(Foo), typeof(Bar));
-```
-
-We generally, though, want the queries used in a system to be registered with the system, so we should usually instead create queries with `GetEntityQuery()` of the system instead of *via* the `EntityManager`.
 
 ## **creating entities**
 
@@ -101,7 +91,7 @@ manager.CreateEntity(archetype, ents);
 
 ## **getting and setting component values**
 
-*While it is possible to get and set components directly through `EntityManager`, it is usually not optimal or appropriate to do so. Instead, we should more commonly get and set components in jobs iterating over the entities matching a query. This is covered elsewhere with `IJobChunk` and `Entities.ForEach`.*
+*While it is possible to get and set components directly through `EntityManager`, it is usually not optimal or appropriate to do so. Instead, we should more commonly get and set components in jobs iterating over the entities matching a query. This is covered elsewhere with `IJobChunk`, `Entities.ForEach`, and `SystemBase`.*
 
 - `GetComponentData<T>(Entity)` returns `T`
 - `SetComponentData<T>(Entity, T)`
@@ -398,10 +388,5 @@ EntityArchetype archetype = manager.CreateArchetype(typeof(A), typeof(C));
 // The data of component A is unchanged.
 manager.SetArchetype(e, archetype);
 ```
-
-
-## **accessing 'singleton' entities**
-
-
 
 
