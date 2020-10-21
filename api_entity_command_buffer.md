@@ -101,16 +101,15 @@ public class MyEntityCommandBufferSystem : EntityCommandBufferSystem
 }
 ```
 
-However, we most commonly only need one of the six `EntityCommandBufferSystem`'s created for us in the default world:
+However, we most commonly only need one of the five `EntityCommandBufferSystem`'s created for us in the default world:
 
 - `BeginInitializationEntityCommandBufferSystem`
 - `EndInitializationEntityCommandBufferSystem`
 - `BeginSimulationEntityCommandBufferSystem`
 - `EndSimulationEntityCommandBufferSystem`
 - `BeginPresentationEntityCommandBufferSystem`
-- `EndPresentationEntityCommandBufferSystem`
 
-As their names imply, these are updated at the beginings and ends of each of the three default world top-level system groups (`InitializationSystemGroup`, `SimulationSystemGroup`, and `PresentationSystemGroup`).
+As their names imply, these are updated at the beginings and ends of each of the three default world top-level system groups: `InitializationSystemGroup`, `SimulationSystemGroup`, and `PresentationSystemGroup`. (The `EndPresentationEntityCommandBufferSystem` was removed because making structural changes related to rendering proved to be too error prone.)
 
 So for example:
 
